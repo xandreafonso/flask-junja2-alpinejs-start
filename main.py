@@ -18,7 +18,7 @@ def home():
 
 @app.context_processor
 def template_vars():
-    return { 'version': '1.0.0' }
+    return { 'version': '0.0.1' }
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=5000)

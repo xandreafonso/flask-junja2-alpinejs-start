@@ -1,4 +1,3 @@
-
 from flask import Blueprint, render_template
 
 dashboard_bp = Blueprint('dashboard', __name__)
