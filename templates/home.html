@@ -1,0 +1,18 @@
+
+{% extends "layouts/view.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block page %}
+Hi, I'm Home Content.
+
+<br/>
+<br/>
+
+<button 
+    class="py-2 px-4 rounded bg-blue-700 text-white cursor-pointer"
+    x-data="{ count: 0 }"
+    x-text="count"
+    @click="count++"
+/>
+{% endblock %}
