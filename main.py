@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request
-from controllers.users import users_bp
+from flask import Flask, render_template
+
+from controllers.dashboard import dashboard_bp
+from controllers.profile import profile_bp
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 
-# Register blueprints
-app.register_blueprint(users_bp)
+app.register_blueprint(dashboard_bp)
+app.register_blueprint(profile_bp)
 
 @app.route('/ping')
 def ping():
@@ -13,14 +15,6 @@ def ping():
 @app.route('/')
 def home():
     return render_template('home.html')
-
-@app.route('/dashboard')
-def dashboard():
-    return render_template('pages/dashboard.html')
-
-@app.route('/profile')
-def profile():
-    return render_template('pages/profile.html')
 
 @app.context_processor
 def template_vars():
