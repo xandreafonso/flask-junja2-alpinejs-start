@@ -7,9 +7,9 @@ app = Flask(__name__, static_folder='static', static_url_path='/static')
 def index():
     return render_template('index.html')
 
-@app.route('/hello')
+@app.route('/ping')
 def hello():
-    return 'Hello from Flask!'
+    return 'pong'
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=5000)
