@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block description %}Sistema Flask com templates hierárquicos{% endblock %}">
+    <title>{% block title %}Flask App{% endblock %}</title>
+    
+    <!-- CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_css %}{% endblock %}
+    
+    <!-- JavaScript -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</head>
+<body class="{% block body_class %}bg-gray-100{% endblock %}">
+    {% block content %}{% endblock %}
+    
+    <!-- Scripts no final do body -->
+    {% block bottom_js %}{% endblock %}
+</body>
+</html>

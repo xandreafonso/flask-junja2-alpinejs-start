@@ -1,0 +1,57 @@
+
+/* Custom CSS for additional styling beyond Tailwind */
+/* Este arquivo pode ser usado para estilos personalizados não cobertos pelo Tailwind */
+
+/* Exemplo de animações personalizadas */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Estilos para impressão */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* Melhorias de acessibilidade */
+.focus-visible:focus {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* Transições suaves para elementos interativos */
+a, button, input, select, textarea {
+    transition: all 0.2s ease-in-out;
+}

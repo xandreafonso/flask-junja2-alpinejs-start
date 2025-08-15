@@ -1,0 +1,85 @@
+
+{% extends "template.html" %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">
+                        {% block header_title %}Flask App{% endblock %}
+                    </h1>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    {% block navigation %}
+                    <a href="{{ url_for('index') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Home</a>
+                    <a href="{{ url_for('dashboard') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Dashboard</a>
+                    <a href="{{ url_for('profile') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Profile</a>
+                    {% endblock %}
+                </nav>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button x-data @click="$dispatch('toggle-mobile-menu')" class="text-gray-700 hover:text-blue-600">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div x-data="{ open: false }" @toggle-mobile-menu.window="open = !open" x-show="open" class="md:hidden border-t border-gray-200">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white">
+                {% block mobile_navigation %}
+                <a href="{{ url_for('index') }}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Home</a>
+                <a href="{{ url_for('dashboard') }}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Dashboard</a>
+                <a href="{{ url_for('profile') }}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Profile</a>
+                {% endblock %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {% block breadcrumbs %}{% endblock %}
+            
+            {% block alerts %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="mb-4 p-4 rounded-md {% if category == 'error' %}bg-red-50 text-red-700 border border-red-200{% else %}bg-blue-50 text-blue-700 border border-blue-200{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% endblock %}
+            
+            {% block main_content %}
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    {% block page_content %}{% endblock %}
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {% block footer %}
+            <div class="text-center text-gray-500">
+                <p>&copy; 2024 Flask App. Todos os direitos reservados.</p>
+                <p class="mt-2 text-sm">Sistema de templates hierárquico com Flask e Jinja2</p>
+            </div>
+            {% endblock %}
+        </div>
+    </footer>
+</div>
+{% endblock %}
