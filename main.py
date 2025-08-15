@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request
+from controllers.users import users_bp
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
+
+# Register blueprints
+app.register_blueprint(users_bp)
 
 @app.route('/ping')
 def ping():
