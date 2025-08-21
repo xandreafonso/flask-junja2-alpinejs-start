@@ -1,25 +1,21 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema de exemplo com Flask, Junja2 e Alpine.js.">
-    
-    <title>{% block title %}{% endblock %} | Alexandre Afonso</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
-    {% block head_css %}{% endblock %}
-    
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    {% block head_js %}{% endblock %}
-</head>
-<body>
-    {% block view %}{% endblock %}
-    
-    {% block body_js %}{% endblock %}
-</body>
-</html>
+{% extends "layouts/html.html" %}
+
+{% block view %}
+<div class="min-h-screen flex flex-col gap-10">
+    <header>
+        <nav class="flex gap-4">
+            <a href="{{ url_for('home') }}" >Home</a>
+            <a href="{{ url_for('dashboard.page') }}">Dashboard</a>
+            <a href="{{ url_for('profile.page') }}">Profile</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block page %}{% endblock %}
+    </main>
+   
+    <footer>
+        &copy; Alexandre Afonso. All rights reserved. Version: {{ version }}
+    </footer>
+</div>
+{% endblock %}
