@@ -8,17 +8,19 @@
     <title>{% block title %}{% endblock %} | Alexandre Afonso</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     
     {% block head_css %}{% endblock %}
     
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/forms@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     {% block head_js %}{% endblock %}
 </head>
 <body>
-    {% block view %}{% endblock %}
+    {% block body %}{% endblock %}
     
     {% block body_js %}{% endblock %}
 </body>

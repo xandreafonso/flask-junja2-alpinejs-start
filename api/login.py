@@ -1,10 +1,10 @@
 
 from flask import Blueprint, jsonify
 
-profile_bp_api = Blueprint('profile_api', __name__)
+login_bp_api = Blueprint('login_api', __name__)
 
-@profile_bp_api.route('/api/profile')
-def get():
+@login_bp_api.route('/api/login', methods=['POST'])
+def login():
     user_data = {
         'id': '123',
         'name': 'Alexandre Afonso',

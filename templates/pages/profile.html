@@ -4,7 +4,7 @@
 {% block title %}Perfil{% endblock %}
 
 {% block page %}
-<div x-data="profileData()" x-init="fetchProfile()">
+<div x-data="profile()" x-init="load()">
     <h2 class="text-2xl font-bold mb-4">Profile Information</h2>
     
     <div x-show="loading" class="text-gray-500">
@@ -21,13 +21,13 @@
 </div>
 
 <script>
-function profileData() {
+function profile() {
     return {
         profile: null,
         loading: false,
         error: null,
         
-        async fetchProfile() {
+        async load() {
             this.loading = true;
             this.error = null;
             
