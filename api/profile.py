@@ -3,9 +3,8 @@ from flask import Blueprint, jsonify
 
 profile_bp_api = Blueprint('profile_api', __name__)
 
-@profile_bp_api.route('/api/users/<code>')
-def get_user_by_id(code):
-    # Example response - replace with your actual logic
+@profile_bp_api.route('/api/profile')
+def get(code):
     user_data = {
         'id': code,
         'name': f'User {code}',
