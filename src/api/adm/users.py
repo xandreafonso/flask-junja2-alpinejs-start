@@ -84,5 +84,6 @@ def delete(code):
         
     except Exception as e:
         db.session.rollback()
+        
         return jsonify([{ 'message': f'Erro na tentativa de deletar. Motivo: {e}' }]), 500
 

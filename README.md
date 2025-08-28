@@ -17,7 +17,7 @@ py -m venv venv
 
 ```shell
 git config --global user.name "Alexandre Afonso"
-git config --global user.email "contato@alexandreafonso.com.br"
+git config --global user.email "contato@xxx.xxx.br"
 ```
 
 # CONTAINERS DOCKER
@@ -84,7 +84,7 @@ docker run -d -p 6333:6333 -p 6334:6334 -e QDRANT__SERVICE__API_KEY=58698e77-373
             "Effect": "Allow",
             "Principal": "*",
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::s3.n8n.alexandreafonso.com.br/public/*"
+            "Resource": "arn:aws:s3:::s3.n8n.xxx.xxx.br/public/*"
         }
     ]
 }
