@@ -1,0 +1,220 @@
+{% extends "layouts/template.html" %}
+
+{% block title %}Posts{% endblock %}
+
+{% block page_title %}Posts{% endblock %}
+
+{% block page %}
+<div x-data="posts()" x-init="load()" class="h-full flex flex-col gap-4">
+    <div class="flex items-center gap-4">
+        <input type="text" placeholder="Pesquisar por nome ou status..." x-model="filters.term"
+            @input.debounce.1000ms="loadFirstPage()"
+            class="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+
+        <div class="flex items-center gap-2">
+            <label class="text-xs text-zinc-400 mb-1">De:</label>
+            <input type="text" placeholder="dd/mm/aaaa" x-model="filters.date_from" x-mask="99/99/9999"
+                @input.debounce.1000ms="loadFirstPage()"
+                class="w-32 px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" />
+        </div>
+
+        <div class="flex items-center gap-2">
+            <label class="text-xs text-zinc-400 mb-1">Até:</label>
+            <input type="text" placeholder="dd/mm/aaaa" x-model="filters.date_to" x-mask="99/99/9999"
+                @input.debounce.1000ms="loadFirstPage()"
+                class="w-32 px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-200 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" />
+        </div>
+    </div>
+
+    <i x-show="loading" data-lucide="loader-2" class="animate-spin h-5 w-5"></i>
+
+    <table x-show="!loading" class="w-full text-left text-zinc-300 border border-zinc-700 rounded-lg overflow-hidden">
+        <thead class="bg-zinc-700 text-zinc-200 uppercase text-xs">
+            <tr>
+                <th class="p-4">Código</th>
+                <th class="p-4">Criação</th>
+                <th class="p-4">Agendado</th>
+                <th class="p-4">Status</th>
+                <th class="p-4">Nome</th>
+                <th class="p-4">Briefing</th>
+                <th class="p-4">Copy</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-700">
+            <template x-for="post in items" :key="post.code">
+                <tr class="hover:bg-zinc-900 transition">
+                    <td class="p-4 font-mono" x-text="post.code.substring(0, 7)"></td>
+                    <td class="p-4" x-text="format.date_output(post.created_at)"></td>
+                    <td class="p-4" x-text="format.date_output(post.scheduled_at)"></td>
+                    <td class="p-4">
+                        <span class="px-2 py-1 rounded text-xs font-medium bg-zinc-700 text-zinc-200"
+                            x-text="post.status">
+                        </span>
+                    </td>
+                    <td class="p-4" x-text="post.name"></td>
+                    <td class="p-4" x-text="truncate(post.briefing, 30)"></td>
+                    <td class="p-4" x-text="truncate(post.copy, 50)"></td>
+                </tr>
+            </template>
+        </tbody>
+    </table>
+
+    <div class="flex items-center gap-4 text-sm text-zinc-400">
+        <div class="flex items-center gap-2">
+            <button class="px-3 py-2 rounded bg-zinc-100 text-zinc-900 hover:opacity-80 disabled:opacity-50"
+                @click="first" :disabled="is_first">
+                <i data-lucide="arrow-big-left-dash" class="h-4 w-4"></i>
+            </button>
+
+            <button class="px-3 py-2 rounded bg-zinc-100 text-zinc-900 hover:opacity-80 disabled:opacity-50"
+                @click="prev" :disabled="!has_prev">
+                <i data-lucide="arrow-big-left" class="h-4 w-4"></i>
+            </button>
+        </div>
+
+        <span>Página <span x-text="page"></span> de <span x-text="total_pages"></span></span>
+
+        <div class="flex items-center gap-2">
+            <button class="px-3 py-2 rounded bg-zinc-100 text-zinc-900 hover:opacity-80 disabled:opacity-50"
+                @click="next" :disabled="!has_next">
+                <i data-lucide="arrow-big-right" class="h-4 w-4"></i>
+            </button>
+
+            <button class="px-3 py-2 rounded bg-zinc-100 text-zinc-900 hover:opacity-80 disabled:opacity-50"
+                @click="last" :disabled="is_last">
+                <i data-lucide="arrow-big-right-dash" class="h-4 w-4"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function posts() {
+        return {
+            loading: false,
+
+            items: [],
+            page: Number('{{ page }}'),
+            per_page: Number('{{ per_page }}'),
+            total_pages: Number('{{ total_pages }}'),
+            is_first: false,
+            is_last: false,
+            has_next: false,
+            has_prev: false,
+            filters: {
+                term: '{{ filters.term }}',
+                date_from: date_output('{{ filters.date_from or "" }}'),
+                date_to: date_output('{{ filters.date_to or "" }}')
+            },
+
+            async loadFirstPage() {
+                this.page = 1
+                this.load()
+            },
+
+            async load() {
+                this.loading = true
+
+                const params = new URLSearchParams({
+                    page: this.page,
+                    term: this.filters.term,
+                    date_from: this.format.date_input(this.filters.date_from),
+                    date_to: this.format.date_input(this.filters.date_to),
+                })
+
+                const entries = Array.from(params.entries())
+
+                for (let [key, value] of entries) {
+                    if (!value) {
+                        params.delete(key)
+                    }
+                }
+
+                const response = await fetch(`/api/adm/posts?${params}`)
+                const result = await response.json()
+
+                this.items = result.items
+                this.page = result.page
+                this.total_pages = result.total_pages || 1
+                this.is_first = result.page === 1
+                this.is_last = result.page === result.total_pages || result.total_pages === 0
+                this.has_next = result.has_next
+                this.has_prev = result.has_prev
+
+                this.loading = false
+
+                console.log("load2:", this.page)
+
+                const newURL = `${window.location.pathname}?${params.toString()}`
+                history.pushState({ page: this.page }, '', newURL)
+            },
+
+            first() {
+                if (!this.is_first) {
+                    this.page = 1
+                    this.load()
+                }
+            },
+
+            last() {
+                if (!this.is_last) {
+                    this.page = this.total_pages
+                    this.load()
+                }
+            },
+
+            next() {
+                if (this.has_next) {
+                    this.page++
+                    this.load()
+                }
+            },
+
+            prev() {
+                if (this.has_prev) {
+                    this.page--
+                    this.load()
+                }
+            },
+
+            format: {
+                date_output,
+                date_input
+            },
+
+            truncate(text, length) {
+                if (!text) return ""
+                return text.length > length ? text.substring(0, length) + "..." : text
+            }
+        }
+    }
+
+    function date_output(dateStr) {
+        if (!dateStr || dateStr.indexOf("-") === -1) return ''
+
+        if (dateStr.length === 10) {
+            const [year, month, day] = dateStr.split('-')
+            return `${day}/${month}/${year}`
+        }
+
+        const d = new Date(dateStr)
+
+        const formatter = new Intl.DateTimeFormat('pt-BR', {
+            timeZone: 'America/Sao_Paulo',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        })
+
+        return formatter.format(d)
+    }
+
+    function date_input(dateStr) {
+        if (!dateStr || dateStr.length !== 10 || dateStr.indexOf("/") === -1) return ''
+
+        const [day, month, year] = dateStr.split('/')
+
+        return `${year}-${month}-${day}`;
+    }
+</script>
+{% endblock %}

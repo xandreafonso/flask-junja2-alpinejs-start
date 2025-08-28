@@ -1,0 +1,27 @@
+###
+POST http://localhost:9000/api/login
+Content-Type: application/json
+
+{
+    "email": "afonsoaaf@gmail.com",
+    "password": "1234"
+}
+
+###
+POST http://localhost:9000/api/adm/users
+Content-Type: application/json
+
+{
+    "name": "Alexandre Afonso",
+    "email": "afonsoaaf@gmail.com",
+    "password": "1234"
+}
+
+###
+DELETE http://localhost:9000/api/adm/users/54f5060c-3cf9-49ee-b7b7-8f9cb41564f2
+
+###
+GET http://localhost:9000/api/adm/users/54f5060c-3cf9-49ee-b7b7-8f9cb41564f2
+
+###
+GET http://localhost:9000/api/adm/users

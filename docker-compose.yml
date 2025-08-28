@@ -1,0 +1,20 @@
+version: "3.3"
+
+services:
+  pmd:
+    image: apps-app:v0.1
+    restart: unless-stopped
+    networks:
+      - traefik-net
+    env_file:
+      - stack.env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pmd.rule=Host(`apps.alexandreafonso.com.br`)
+      - traefik.http.routers.pmd.entrypoints=websecure
+      - traefik.http.services.pmd.loadbalancer.server.port=3000
+      - traefik.http.routers.pmd.tls.certresolver=letsencrypt-resolver
+
+networks:
+  traefik-net:
+    external: true

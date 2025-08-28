@@ -1,0 +1,48 @@
+{% extends "layouts/template.html" %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block page_title %}Perfil{% endblock %}
+
+{% block page %}
+<div x-data="profile()" x-init="load()">
+    <div x-show="loading" class="text-gray-500">
+        Loading profile data...
+    </div>
+    
+    <div x-show="!loading && profile" >
+        <p><strong>ID:</strong> <span x-text="profile.id"></span></p>
+        <p><strong>Name:</strong> <span x-text="profile.name"></span></p>
+        <p><strong>Email:</strong> <span x-text="profile.email"></span></p>
+    </div>
+    
+    <div x-show="error" class="text-red-500" x-text="error"></div>
+</div>
+
+<script>
+function profile() {
+    return {
+        profile: null,
+        loading: false,
+        error: null,
+        
+        async load() {
+            this.loading = true;
+            this.error = null;
+            
+            try {
+                const response = await fetch('/api/adm/profile');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                this.profile = await response.json();
+            } catch (err) {
+                this.error = 'Failed to fetch profile data: ' + err.message;
+            } finally {
+                this.loading = false;
+            }
+        }
+    }
+}
+</script>
+{% endblock %}

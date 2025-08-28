@@ -1,0 +1,86 @@
+{% extends "layouts/html.html" %}
+
+{% block body %}
+<div x-data="template()" x-init="init()" class="h-screen flex bg-zinc-800 text-white ">
+    <aside 
+        class="w-64 p-4 flex flex-col gap-4 bg-zinc-900 text-white"
+
+        x-show="aside.show"
+        :class="mobile ? 'fixed top-0 left-0 h-screen z-10' : ''"
+        
+        x-transition:enter="transition ease-out duration-500 transform"
+        x-transition:enter-start="opacity-0 -translate-x-full"
+        x-transition:enter-end="opacity-100 translate-x-0"
+        x-transition:leave="transition ease-in duration-300 transform"
+        x-transition:leave-start="opacity-100 translate-x-0"
+        x-transition:leave-end="opacity-0 -translate-x-full"
+    >
+        <div class="py-2 flex items-center gap-2 px-4 font-bold text-blue-400">
+            <i data-lucide="cog" class="h-5 w-5"></i>
+            Apps
+        </div>
+
+        <nav>
+            <ul class="flex flex-col gap-1">
+                <li>
+                    <a class="block py-2 px-4 rounded hover:bg-zinc-600" href="{{ url_for('home') }}" >Home</a>
+                </li>
+                <li>
+                    <a class="block py-2 px-4 rounded hover:bg-zinc-600" href="{{ url_for('login') }}" >Login</a>
+                </li>
+                <li>
+                    <a class="block py-2 px-4 rounded hover:bg-zinc-600" href="{{ url_for('adm_dashboard.page') }}">Dashboard</a>
+                </li>
+                <li>
+                    <a class="block py-2 px-4 rounded hover:bg-zinc-600" href="{{ url_for('adm_profile.page') }}">Profile</a>
+                </li>
+                <li>
+                    <a class="block py-2 px-4 rounded hover:bg-zinc-600" href="{{ url_for('adm_posts.page') }}">Posts</a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main 
+        class="h-full w-full p-4 overflow-y-auto"
+    >
+        <div class="h-full w-full flex flex-col gap-7">
+            <header class="flex items-center justify-between border-b border-zinc-700 pb-4">
+                <div class="flex items-center gap-7">
+                    <button @click="aside.show = !aside.show">
+                        <i data-lucide="panel-left" class="h-5 w-5"></i>
+                    </button>
+
+                    <h2 class="text-2xl">{% block page_title %}Título Página{% endblock %}</h2>
+                </div>
+
+                <div>
+                    <a class="flex items-center gap-2 hover:underline" href="#">
+                        <i data-lucide="log-out" class="h-5 w-5"></i>
+
+                        Sair
+                    </a>
+                </div>
+            </header>
+
+            {% block page %}{% endblock %}
+        </div>
+    </main>
+</div>
+
+<script>
+    function template() {
+        return {
+            mobile: false,
+
+            aside: {
+                show: true
+            },
+
+            init() {
+                this.$nextTick(() => lucide.createIcons())
+            }
+        }
+    }
+</script>
+{% endblock %}
