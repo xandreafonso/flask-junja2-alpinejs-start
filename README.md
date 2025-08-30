@@ -2,7 +2,9 @@
 
 ```shell
 sudo apt update && sudo apt install python3 python3-pip python3-venv -y
-python3 -m venv .venv && curl -sSL https://install.python-poetry.org | python3 -
+python3 -m venv .venv
+curl -sSL https://install.python-poetry.org | python3 - # poetry
+
 curl -fsSL https://get.docker.com | bash
 PORT=9000 ./devserver.sh 
 ```
@@ -11,6 +13,8 @@ PORT=9000 ./devserver.sh
 py -m venv venv
 (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
 [Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", "User") + ";C:\Users\afons\AppData\Roaming\Python\Scripts", "User")
+
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex" # uv
 ```
 
 # GIT
